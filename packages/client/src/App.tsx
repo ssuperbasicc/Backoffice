@@ -14,6 +14,7 @@ import listRoutes from "./registerRoutes"
 
 import Sidebar from "./components/Sidebar"
 import Navbar from "./components/Navbar"
+import Login from "./pages/Login";
 
 const Root: React.FC = () => {
   const [toggleSidebar, setToggleSidebar] = useState<boolean>(false)
@@ -60,8 +61,7 @@ const Root: React.FC = () => {
 const router = createBrowserRouter([
   {
     path: "/",
-    // element: !window.sessionStorage.getItem("token") ? <Root /> : <div>hallo</div>,
-    element: <Root />,
+    element: window.sessionStorage.getItem("token") ? <Root /> : <Login />,
     children: listRoutes
   }
 ])

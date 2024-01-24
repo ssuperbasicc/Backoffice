@@ -20,6 +20,7 @@ model Employee {
 
   workUnit         WorkUnit           @relation(fields: [workUnitId], references: [id])
   EmployeePosition EmployeePosition[]
+  AuthHistory      AuthHistory[]
 }
 
 model Position {
@@ -44,4 +45,14 @@ model EmployeePosition {
   position Position @relation(fields: [positionId], references: [id])
 
   @@id([employeeId, positionId])
+}
+
+model AuthHistory {
+  id              Int      @id @default(autoincrement())
+  jti             String   @db.VarChar(64)
+  uid             Int
+  token           String
+  createTimestamp DateTime @default(now())
+
+  employee Employee @relation(fields: [uid], references: [id], onDelete: Cascade)
 }
