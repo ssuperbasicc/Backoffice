@@ -16,4 +16,16 @@ router.get(
     ct.topTenLogin
 )
 
+router.get(
+    '/filter-employee',
+    [ verifyJwt ],
+    ct.filterEmployee
+)
+
+router.get(
+    '/filter-auth',
+    [ verifyJwt ],
+    ct.filterAuth
+)
+
 module.exports = router;

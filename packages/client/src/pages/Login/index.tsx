@@ -32,12 +32,10 @@ const Login: React.FC = () => {
             navigate("/")
             window.location.reload()
         })
-
         .catch(err => {
             console.debug(err)
             window.alert(err?.response?.data?.responseMessage)
         })
-
     }
 
     return (
