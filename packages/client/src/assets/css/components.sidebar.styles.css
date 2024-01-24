@@ -1,0 +1,11 @@
+.x-sidebar ul li:hover {
+    background-color: gray;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.x-active {
+    background-color: gray;
+    color: #fff;
+}
