@@ -10,7 +10,11 @@ const allEmployee = async (req, res, next) => {
     try {
         let customRows = []
 
-        const employeeRows = await db.employee.findMany()
+        const employeeRows = await db.employee.findMany({
+            include: {
+                workUnit: true
+            }
+        })
 
         // exclude column password
         async function generateCustomRows () {
@@ -80,7 +84,10 @@ const readSingleEmployee = async (req, res, next) => {
         const { id } = req.query
 
         const employeeRow = await db.employee.findUnique({
-            where: { id: parseInt(id) }
+            where: { id: parseInt(id) },
+            include: {
+                workUnit: true
+            }
         })
 
         // exclude column password
