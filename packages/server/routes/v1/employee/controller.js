@@ -86,7 +86,12 @@ const readSingleEmployee = async (req, res, next) => {
         const employeeRow = await db.employee.findUnique({
             where: { id: parseInt(id) },
             include: {
-                workUnit: true
+                workUnit: true,
+                EmployeePosition: {
+                    include: {
+                        position: true
+                    }
+                }
             }
         })
 
@@ -105,7 +110,17 @@ const readSingleEmployee = async (req, res, next) => {
 const updateEmployee = async (req, res, next) => {
     const db = new PrismaClient()
     try {
-        const { id, name, username, workUnitId } = req.body
+        const { id, name, username, workUnitId, listPositionIdToCreate, listPositionIdToDelete } = req.body
+
+        let customListCreate = []
+
+        async function generateCustomList () {
+            listPositionIdToCreate.forEach((d) => {
+                customListCreate.push({ employeeId: id, positionId: d })
+            })
+        }
+
+        await generateCustomList()
 
         await db.employee.update({
             where: { id },
@@ -115,6 +130,22 @@ const updateEmployee = async (req, res, next) => {
                 workUnitId
             }
         })
+
+        if (listPositionIdToCreate.length > 0) {
+            await db.employeePosition.createMany({
+                data: customListCreate
+            })
+        }
+
+        if (listPositionIdToDelete.length > 0) {
+            await db.employeePosition.deleteMany({
+                where: {
+                    positionId: {
+                        in: listPositionIdToDelete
+                    }
+                }
+            })
+        }
 
         res.status(200).send(resFn(200, "Successfully."))
     } catch (error) {
